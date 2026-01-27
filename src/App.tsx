@@ -378,7 +378,11 @@ function App() {
   };
 
 const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
+  console.log('🔵 SimpleModal renderuje się! Type:', type);
+  console.log('🔵 editItem:', editItem);
+  
     const [localFormData, setLocalFormData] = React.useState<any>(editItem || {});
+	console.log('🔵 localFormData:', localFormData);
     
     React.useEffect(() => {
       setLocalFormData(editItem || {});
@@ -886,7 +890,14 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
                 {activeTab === 'employees' && '👷 Pracownicy'}
                 {activeTab === 'suppliers' && '🚚 Dostawcy'}
               </h2>
-              <button className="btn" onClick={() => { setModalType(activeTab as ModalType); setEditItem(null); setShowModal(true); }}>➕ Dodaj</button>
+              <button className="btn" onClick={() => { const tabToModalType: Record<string, ModalType> = {
+  doctors: 'doctor',
+  prosthetics: 'prosthetic',
+  employees: 'employee',
+  suppliers: 'supplier',
+};
+
+setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true); }}>➕ Dodaj</button>
             </div>
             <input className="input" style={{ marginBottom: '1.5rem' }} placeholder="Szukaj..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             {(() => {
