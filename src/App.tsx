@@ -377,20 +377,24 @@ function App() {
     });
   };
 
-	const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
-    const [formData, setFormData] = useState<any>(editItem || {});
+const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
+    const [localFormData, setLocalFormData] = React.useState<any>(editItem || {});
     
+    React.useEffect(() => {
+      setLocalFormData(editItem || {});
+    }, [editItem]);
+
     const handleSave = () => {
       if (type === 'doctor') { 
-        editItem ? updateDoctor(editItem.id, formData) : addDoctor(formData); 
+        editItem ? updateDoctor(editItem.id, localFormData) : addDoctor(localFormData); 
       } else if (type === 'prosthetic') { 
-        editItem ? updateProsthetic(editItem.id, formData) : addProsthetic(formData); 
+        editItem ? updateProsthetic(editItem.id, localFormData) : addProsthetic(localFormData); 
       } else if (type === 'employee') { 
-        editItem ? updateEmployee(editItem.id, formData) : addEmployee(formData); 
+        editItem ? updateEmployee(editItem.id, localFormData) : addEmployee(localFormData); 
       } else if (type === 'supplier') { 
-        editItem ? updateSupplier(editItem.id, formData) : addSupplier(formData); 
+        editItem ? updateSupplier(editItem.id, localFormData) : addSupplier(localFormData); 
       } else if (type === 'order') { 
-        editItem ? updateOrder(editItem.id, formData) : addOrder(formData); 
+        editItem ? updateOrder(editItem.id, localFormData) : addOrder(localFormData); 
       }
       setShowModal(false);
       setEditItem(null);
@@ -419,18 +423,24 @@ function App() {
                 <div className="form-group">
                   <label className="form-label">Imię i nazwisko *</label>
                   <input 
-                    className="input" 
-                    value={formData.name || ''} 
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
-                    placeholder="Dr Jan Kowalski"
+  style={{ 
+    width: '100%', 
+    padding: '0.75rem', 
+    border: '2px solid #d1d5db', 
+    borderRadius: '0.5rem',
+    fontSize: '1rem'
+  }}
+  value={localFormData.name || ''} 
+  onChange={(e) => setLocalFormData({ ...localFormData, name: e.target.value })} 
+  placeholder="Jan Kowalski"
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Specjalizacja</label>
                   <input 
                     className="input" 
-                    value={formData.specialty || ''} 
-                    onChange={(e) => setFormData({ ...formData, specialty: e.target.value })} 
+                    value={localFormData.specialty || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, specialty: e.target.value })} 
                     placeholder="Protetyka"
                   />
                 </div>
@@ -438,8 +448,8 @@ function App() {
                   <label className="form-label">Telefon</label>
                   <input 
                     className="input" 
-                    value={formData.phone || ''} 
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+                    value={localFormData.phone || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, phone: e.target.value })} 
                     placeholder="+48 123 456 789"
                   />
                 </div>
@@ -448,8 +458,8 @@ function App() {
                   <input 
                     type="email"
                     className="input" 
-                    value={formData.email || ''} 
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                    value={localFormData.email || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, email: e.target.value })} 
                     placeholder="lekarz@example.com"
                   />
                 </div>
@@ -457,8 +467,8 @@ function App() {
                   <label className="form-label">Gabinet/Klinika</label>
                   <input 
                     className="input" 
-                    value={formData.clinic || ''} 
-                    onChange={(e) => setFormData({ ...formData, clinic: e.target.value })} 
+                    value={localFormData.clinic || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, clinic: e.target.value })} 
                     placeholder="Klinika Dentystyczna"
                   />
                 </div>
@@ -472,8 +482,8 @@ function App() {
                   <label className="form-label">Nazwa uzupełnienia *</label>
                   <input 
                     className="input" 
-                    value={formData.name || ''} 
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    value={localFormData.name || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, name: e.target.value })} 
                     placeholder="Korona porcelanowa"
                   />
                 </div>
@@ -482,8 +492,8 @@ function App() {
                     <label className="form-label">Kod GMLC *</label>
                     <input 
                       className="input" 
-                      value={formData.gmlcCode || ''} 
-                      onChange={(e) => setFormData({ ...formData, gmlcCode: e.target.value })} 
+                      value={localFormData.gmlcCode || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, gmlcCode: e.target.value })} 
                       placeholder="GMLC-001"
                     />
                   </div>
@@ -492,8 +502,8 @@ function App() {
                     <input 
                       type="number" 
                       className="input" 
-                      value={formData.minDays || ''} 
-                      onChange={(e) => setFormData({ ...formData, minDays: e.target.value })} 
+                      value={localFormData.minDays || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, minDays: e.target.value })} 
                       placeholder="7"
                       min="1"
                     />
@@ -504,8 +514,8 @@ function App() {
                       type="number" 
                       step="0.01" 
                       className="input" 
-                      value={formData.price || ''} 
-                      onChange={(e) => setFormData({ ...formData, price: e.target.value })} 
+                      value={localFormData.price || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, price: e.target.value })} 
                       placeholder="450.00"
                       min="0"
                     />
@@ -515,8 +525,8 @@ function App() {
                   <label className="form-label">Etapy produkcji (oddzielone przecinkami)</label>
                   <input 
                     className="input" 
-                    value={formData.stages ? formData.stages.join(', ') : ''} 
-                    onChange={(e) => setFormData({ ...formData, stages: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })} 
+                    value={localFormData.stages ? localFormData.stages.join(', ') : ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, stages: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })} 
                     placeholder="Odlew, Szlifowanie, Porcelana, Glazura"
                   />
                 </div>
@@ -530,8 +540,8 @@ function App() {
                   <label className="form-label">Imię i nazwisko *</label>
                   <input 
                     className="input" 
-                    value={formData.name || ''} 
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    value={localFormData.name || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, name: e.target.value })} 
                     placeholder="Jan Kowalski"
                   />
                 </div>
@@ -539,8 +549,8 @@ function App() {
                   <label className="form-label">Stanowisko</label>
                   <input 
                     className="input" 
-                    value={formData.position || ''} 
-                    onChange={(e) => setFormData({ ...formData, position: e.target.value })} 
+                    value={localFormData.position || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, position: e.target.value })} 
                     placeholder="Technik dentystyczny"
                   />
                 </div>
@@ -548,8 +558,8 @@ function App() {
                   <label className="form-label">Kompetencje (oddzielone przecinkami)</label>
                   <input 
                     className="input" 
-                    value={formData.skills ? formData.skills.join(', ') : ''} 
-                    onChange={(e) => setFormData({ ...formData, skills: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })} 
+                    value={localFormData.skills ? localFormData.skills.join(', ') : ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, skills: e.target.value.split(',').map((s: string) => s.trim()).filter(Boolean) })} 
                     placeholder="Odlew, Szlifowanie, Porcelana"
                   />
                 </div>
@@ -563,8 +573,8 @@ function App() {
                   <label className="form-label">Nazwa firmy *</label>
                   <input 
                     className="input" 
-                    value={formData.name || ''} 
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                    value={localFormData.name || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, name: e.target.value })} 
                     placeholder="Odlewnia MetalArt"
                   />
                 </div>
@@ -572,8 +582,8 @@ function App() {
                   <label className="form-label">Świadczona usługa</label>
                   <input 
                     className="input" 
-                    value={formData.service || ''} 
-                    onChange={(e) => setFormData({ ...formData, service: e.target.value })} 
+                    value={localFormData.service || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, service: e.target.value })} 
                     placeholder="Odlewnictwo metali"
                   />
                 </div>
@@ -581,8 +591,8 @@ function App() {
                   <label className="form-label">Kontakt</label>
                   <input 
                     className="input" 
-                    value={formData.contact || ''} 
-                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })} 
+                    value={localFormData.contact || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, contact: e.target.value })} 
                     placeholder="Tel / Email"
                   />
                 </div>
@@ -592,8 +602,8 @@ function App() {
                     type="number" 
                     step="0.01" 
                     className="input" 
-                    value={formData.costPerService || ''} 
-                    onChange={(e) => setFormData({ ...formData, costPerService: e.target.value })} 
+                    value={localFormData.costPerService || ''} 
+                    onChange={(e) => setLocalFormData({ ...localFormData, costPerService: e.target.value })} 
                     placeholder="150.00"
                     min="0"
                   />
@@ -609,8 +619,8 @@ function App() {
                     <label className="form-label">Lekarz *</label>
                     <select 
                       className="select" 
-                      value={formData.doctorId || ''} 
-                      onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}
+                      value={localFormData.doctorId || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, doctorId: e.target.value })}
                     >
                       <option value="">Wybierz...</option>
                       {doctors.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
@@ -620,8 +630,8 @@ function App() {
                     <label className="form-label">Kod pacjenta *</label>
                     <input 
                       className="input" 
-                      value={formData.patientCode || ''} 
-                      onChange={(e) => setFormData({ ...formData, patientCode: e.target.value })} 
+                      value={localFormData.patientCode || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, patientCode: e.target.value })} 
                       placeholder="Jan Kowalski"
                     />
                   </div>
@@ -631,8 +641,8 @@ function App() {
                     <label className="form-label">Typ uzupełnienia *</label>
                     <select 
                       className="select" 
-                      value={formData.prostheticId || ''} 
-                      onChange={(e) => setFormData({ ...formData, prostheticId: e.target.value })}
+                      value={localFormData.prostheticId || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, prostheticId: e.target.value })}
                     >
                       <option value="">Wybierz...</option>
                       {prosthetics.map(p => <option key={p.id} value={p.id}>{p.name} - {p.price} zł</option>)}
@@ -643,8 +653,8 @@ function App() {
                     <input 
                       type="date" 
                       className="input" 
-                      value={formData.deadline || ''} 
-                      onChange={(e) => setFormData({ ...formData, deadline: e.target.value })} 
+                      value={localFormData.deadline || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, deadline: e.target.value })} 
                     />
                   </div>
                 </div>
@@ -653,8 +663,8 @@ function App() {
                     <label className="form-label">Numery zębów *</label>
                     <input 
                       className="input" 
-                      value={formData.teethNumbers || ''} 
-                      onChange={(e) => setFormData({ ...formData, teethNumbers: e.target.value })} 
+                      value={localFormData.teethNumbers || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, teethNumbers: e.target.value })} 
                       placeholder="14, 15, 16"
                     />
                   </div>
@@ -662,8 +672,8 @@ function App() {
                     <label className="form-label">Materiał *</label>
                     <input 
                       className="input" 
-                      value={formData.material || ''} 
-                      onChange={(e) => setFormData({ ...formData, material: e.target.value })} 
+                      value={localFormData.material || ''} 
+                      onChange={(e) => setLocalFormData({ ...localFormData, material: e.target.value })} 
                       placeholder="Porcelana IPS e.max"
                     />
                   </div>
@@ -683,7 +693,6 @@ function App() {
       </div>
     );
   };
-
   if (!initialized) {
     return (
       <div className="loading">
