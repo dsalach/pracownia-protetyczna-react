@@ -242,12 +242,13 @@ function App() {
   };
 
   const deleteDoctor = (id: number) => {
-    if (orders.some(o => o.doctorId === id)) {
+    const normalizedId = Number(id);
+    if (orders.some(o => Number(o.doctorId) === normalizedId)) {
       showNotification('Nie można usunąć lekarza z przypisanymi zleceniami', 'error');
       setShowConfirmDelete(null);
       return;
     }
-    const updated = doctors.filter(d => d.id !== id);
+    const updated = doctors.filter(d => Number(d.id) !== normalizedId);
     setDoctors(updated);
     saveToStorage('doctors', updated);
     showNotification('Lekarz usunięty');
