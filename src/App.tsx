@@ -899,7 +899,7 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
 
 setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true); }}>➕ Dodaj</button>
             </div>
-            <input className="input" style={{ marginBottom: '1.5rem' }} placeholder="Szukaj..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+             <input className="input" style={{ marginBottom: '1.5rem' }} placeholder="Szukaj..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             {(() => {
               let items: any[] = [];
               if (activeTab === 'doctors') items = doctors;
@@ -925,6 +925,20 @@ setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true); 
                     <div className="list-actions">
                       <button className="btn btn-sm" onClick={() => { setEditItem(item); setModalType(activeTab as ModalType); setShowModal(true); }}>✏️ Edytuj</button>
                       <button className="btn btn-sm btn-red" onClick={() => setShowConfirmDelete({ type: activeTab, id: item.id })}>🗑️ Usuń</button>
+                      <button
+                        className="btn btn-sm btn-red"
+                        onClick={() => {
+                          const tabToDeleteType: Record<string, string> = {
+                            doctors: 'doctor',
+                            prosthetics: 'prosthetic',
+                            employees: 'employee',
+                            suppliers: 'supplier',
+                          };
+                          setShowConfirmDelete({ type: tabToDeleteType[activeTab], id: item.id });
+                        }}
+                      >
+                        🗑️ Usuń
+                      </button>
                     </div>
                   </div>
                 ));
@@ -950,26 +964,7 @@ setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true); 
               </div>
             ))}
             {invoices.length === 0 && <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>Brak faktur</p>}
-          </div>
-        )}
-
-        {activeTab === 'declarations' && (
-          <div className="card">
-            <h2>📄 Oświadczenia</h2>
-            {declarations.map(dec => (
-              <div key={dec.id} className="list-item">
-                <div style={{ flex: 1 }}>
-                  <div className="list-title">{dec.declarationNumber}</div>
-                  <div className="list-desc">Pacjent: {dec.patientCode}</div>
-                  <div className="list-desc">{dec.prostheticName} • {dec.gmlcCode}</div>
-                </div>
-              </div>
-            ))}
-            {declarations.length === 0 && <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>Brak oświadczeń</p>}
-          </div>
-        )}
-      </main>
-
+@@ -973,26 +986,26 @@ setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true);
       {showModal && modalType && <SimpleModal type={modalType} />}
 
       {showConfirmDelete && (
@@ -995,4 +990,5 @@ setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true); 
   );
 }
 
+export default App;
 export default App;
