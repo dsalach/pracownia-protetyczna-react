@@ -228,6 +228,8 @@ body {
 
 .form-group {
   margin-bottom: 1.5rem;
+    background: #f0f0f0; /* ← DODAJ dla testu */
+  padding: 10px; /* ← DODAJ dla testu */
 }
 
 .form-label {
@@ -245,6 +247,8 @@ body {
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: border-color 0.2s;
+    background: #fff !important; /* ← DODAJ */
+  color: #000 !important; /* ← DODAJ */
 }
 
 .input:focus, .select:focus, .textarea:focus {
@@ -386,6 +390,8 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  z-index: 1001; /* ← DODAJ TO */
+  position: relative; /* ← I TO */
 }
 
 .modal-header {
