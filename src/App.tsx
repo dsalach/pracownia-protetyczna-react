@@ -958,7 +958,7 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
   </div>
 )}
 
-        {activeTab === 'invoices' && (
+{activeTab === 'invoices' && (
           <div className="card">
             <h2>💰 Faktury</h2>
             {invoices.map(inv => (
@@ -976,7 +976,28 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
               </div>
             ))}
             {invoices.length === 0 && <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>Brak faktur</p>}
-@@ -973,26 +986,26 @@ setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true);
+          </div>
+        )}
+
+        {activeTab === 'declarations' && (
+          <div className="card">
+            <h2>📄 Oświadczenia</h2>
+            {declarations.map(dec => (
+              <div key={dec.id} className="list-item">
+                <div style={{ flex: 1 }}>
+                  <div className="list-title">{dec.declarationNumber}</div>
+                  <div className="list-desc">Pacjent: {dec.patientCode}</div>
+                  <div className="list-desc">Lekarz: {dec.doctorName}</div>
+                  <div className="list-desc">{dec.prostheticName} ({dec.gmlcCode})</div>
+                  <div className="list-desc">Data: {new Date(dec.issueDate).toLocaleDateString('pl-PL')}</div>
+                </div>
+              </div>
+            ))}
+            {declarations.length === 0 && <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>Brak oświadczeń</p>}
+          </div>
+        )}
+      </main>
+
       {showModal && modalType && <SimpleModal type={modalType} />}
 
       {showConfirmDelete && (
@@ -1002,5 +1023,4 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
   );
 }
 
-export default App;
 export default App;
