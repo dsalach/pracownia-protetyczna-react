@@ -66,7 +66,7 @@ function App() {
     useEffect(() => {
     const storedPassword = localStorage.getItem('authPassword');
     if (!storedPassword) {
-      localStorage.setItem('authPassword', 'admin');
+      localStorage.setItem('authPassword', 'soniak');
     }
     const loggedIn = localStorage.getItem('authLoggedIn') === 'true';
     setIsAuthenticated(loggedIn);
@@ -84,7 +84,7 @@ function App() {
   };
 
   const handleLogin = () => {
-    const storedPassword = localStorage.getItem('authPassword') || 'admin';
+    const storedPassword = localStorage.getItem('authPassword') || 'soniak';
     if (loginPassword.trim() === storedPassword) {
       setIsAuthenticated(true);
       setLoginPassword('');
@@ -756,7 +756,7 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
             {loginError && <div className="error-text">{loginError}</div>}
           </div>
           <button className="btn" onClick={handleLogin}>Zaloguj</button>
-          <div className="auth-hint">Domyślne hasło: <strong>admin</strong></div>
+          <div className="auth-hint">Domyślne hasło: <strong>abc</strong></div>
         </div>
       </div>
     );
