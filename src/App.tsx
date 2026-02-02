@@ -24,7 +24,10 @@ function App() {
   const [showConfirmDelete, setShowConfirmDelete] = useState<{ type: string; id: number } | null>(null);
   const [sortBy, setSortBy] = useState<'date' | 'deadline'>('date');
   const [initialized, setInitialized] = useState(false);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState<string | null>(null);
+  
   const loadAllData = React.useCallback(() => {
     try {
       const savedOrders = localStorage.getItem('orders');
@@ -59,6 +62,15 @@ function App() {
   useEffect(() => {
     loadAllData();
   }, [loadAllData]);
+  
+    useEffect(() => {
+    const storedPassword = localStorage.getItem('authPassword');
+    if (!storedPassword) {
+      localStorage.setItem('authPassword', 'admin');
+    }
+    const loggedIn = localStorage.getItem('authLoggedIn') === 'true';
+    setIsAuthenticated(loggedIn);
+  }, []);
 
   useEffect(() => {
     if (notification) {
@@ -71,7 +83,26 @@ function App() {
     setNotification({ message, type });
   };
 
-  const initializeDefaultProsthetics = () => {
+  const handleLogin = () => {
+    const storedPassword = localStorage.getItem('authPassword') || 'admin';
+    if (loginPassword.trim() === storedPassword) {
+      setIsAuthenticated(true);
+      setLoginPassword('');
+      setLoginError(null);
+      localStorage.setItem('authLoggedIn', 'true');
+    } else {
+      setLoginError('Nieprawidłowe hasło');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setLoginPassword('');
+    setLoginError(null);
+    localStorage.removeItem('authLoggedIn');
+  };
+ 
+ const initializeDefaultProsthetics = () => {
     const defaults: Prosthetic[] = [
       { id: Date.now(), name: 'Korona porcelanowa', gmlcCode: 'GMLC-001', minDays: 7, price: 450, stages: ['Odlew', 'Szlifowanie', 'Porcelana', 'Glazura'] },
       { id: Date.now() + 1, name: 'Most 3-punktowy', gmlcCode: 'GMLC-002', minDays: 10, price: 1200, stages: ['Odlew', 'Szlifowanie', 'Porcelana', 'Polerowanie'] },
@@ -707,6 +738,30 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
     );
   }
 
+  if (!isAuthenticated) {
+    return (
+      <div className="auth-screen">
+        <div className="auth-card">
+          <h1 className="auth-title">🔒 Logowanie</h1>
+          <p className="auth-subtitle">Wprowadź hasło, aby uzyskać dostęp do systemu.</p>
+          <div className="form-group">
+            <label className="form-label">Hasło</label>
+            <input
+              type="password"
+              className="input"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+              placeholder="Hasło"
+            />
+            {loginError && <div className="error-text">{loginError}</div>}
+          </div>
+          <button className="btn" onClick={handleLogin}>Zaloguj</button>
+          <div className="auth-hint">Domyślne hasło: <strong>admin</strong></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       {notification && <div className={`toast ${notification.type}`}><strong>{notification.message}</strong></div>}
@@ -719,7 +774,8 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
               ⬆️ Import
               <input type="file" accept=".json" style={{ display: 'none' }} onChange={importData} />
             </label>
-          </div>
+           <button className="nav-btn" onClick={handleLogout}>🚪 Wyloguj</button>
+		  </div>
         </div>
         <div className="nav-tabs">
           {(['dashboard', 'orders', 'doctors', 'prosthetics', 'employees', 'suppliers', 'invoices', 'declarations'] as TabType[]).map(tab => (

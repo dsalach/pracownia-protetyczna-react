@@ -328,6 +328,45 @@ body {
   color: #065f46;
 }
 
+/* Auth */
+.auth-screen {
+  min-height: 100vh;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+.auth-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  color: #111827;
+}
+
+.auth-subtitle {
+  margin: 0 0 1.5rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.auth-hint {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+
 .badge-yellow {
   background: #fef3c7;
   color: #92400e;
