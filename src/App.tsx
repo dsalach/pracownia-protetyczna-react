@@ -882,69 +882,81 @@ const SimpleModal: React.FC<{ type: ModalType }> = ({ type }) => {
         )}
 
 		{['doctors', 'prosthetics', 'employees', 'suppliers'].includes(activeTab) && (
-          <div className="card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2 style={{ margin: 0 }}>
-                {activeTab === 'doctors' && '👨‍⚕️ Lekarze'}
-                {activeTab === 'prosthetics' && '🦷 Uzupełnienia'}
-                {activeTab === 'employees' && '👷 Pracownicy'}
-                {activeTab === 'suppliers' && '🚚 Dostawcy'}
-              </h2>
-              <button className="btn" onClick={() => { const tabToModalType: Record<string, ModalType> = {
-  doctors: 'doctor',
-  prosthetics: 'prosthetic',
-  employees: 'employee',
-  suppliers: 'supplier',
-};
+  <div className="card">
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+      <h2 style={{ margin: 0 }}>
+        {activeTab === 'doctors' && '👨‍⚕️ Lekarze'}
+        {activeTab === 'prosthetics' && '🦷 Uzupełnienia'}
+        {activeTab === 'employees' && '👷 Pracownicy'}
+        {activeTab === 'suppliers' && '🚚 Dostawcy'}
+      </h2>
+      <button className="btn" onClick={() => { 
+        const tabToModalType: Record<string, ModalType> = {
+          doctors: 'doctor',
+          prosthetics: 'prosthetic',
+          employees: 'employee',
+          suppliers: 'supplier',
+        };
+        setModalType(tabToModalType[activeTab]); 
+        setEditItem(null); 
+        setShowModal(true); 
+      }}>➕ Dodaj</button>
+    </div>
+    <input className="input" style={{ marginBottom: '1.5rem' }} placeholder="Szukaj..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+    {(() => {
+      let items: any[] = [];
+      if (activeTab === 'doctors') items = doctors;
+      else if (activeTab === 'prosthetics') items = prosthetics;
+      else if (activeTab === 'employees') items = employees;
+      else if (activeTab === 'suppliers') items = suppliers;
 
-setModalType(tabToModalType[activeTab]); setEditItem(null); setShowModal(true); }}>➕ Dodaj</button>
+      return items
+        .filter((item: any) => !searchTerm || Object.values(item).some(v => String(v).toLowerCase().includes(searchTerm.toLowerCase())))
+        .map((item: any) => (
+          <div key={item.id} className="list-item">
+            <div style={{ flex: 1 }}>
+              <div className="list-title">{item.name}</div>
+              {item.specialty && <div className="list-desc">Specjalizacja: {item.specialty}</div>}
+              {item.phone && <div className="list-desc">Tel: {item.phone}</div>}
+              {item.gmlcCode && <div className="list-desc">Kod: {item.gmlcCode}</div>}
+              {item.price && <div className="list-desc">Cena: {item.price} zł</div>}
+              {item.minDays && <div className="list-desc">Min. czas: {item.minDays} dni</div>}
+              {item.stages && <div className="list-desc">Etapy: {item.stages.join(', ')}</div>}
+              {item.position && <div className="list-desc">Stanowisko: {item.position}</div>}
+              {item.service && <div className="list-desc">Usługa: {item.service}</div>}
             </div>
-             <input className="input" style={{ marginBottom: '1.5rem' }} placeholder="Szukaj..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-            {(() => {
-              let items: any[] = [];
-              if (activeTab === 'doctors') items = doctors;
-              else if (activeTab === 'prosthetics') items = prosthetics;
-              else if (activeTab === 'employees') items = employees;
-              else if (activeTab === 'suppliers') items = suppliers;
-
-              return items
-                .filter((item: any) => !searchTerm || Object.values(item).some(v => String(v).toLowerCase().includes(searchTerm.toLowerCase())))
-                .map((item: any) => (
-                  <div key={item.id} className="list-item">
-                    <div style={{ flex: 1 }}>
-                      <div className="list-title">{item.name}</div>
-                      {item.specialty && <div className="list-desc">Specjalizacja: {item.specialty}</div>}
-                      {item.phone && <div className="list-desc">Tel: {item.phone}</div>}
-                      {item.gmlcCode && <div className="list-desc">Kod: {item.gmlcCode}</div>}
-                      {item.price && <div className="list-desc">Cena: {item.price} zł</div>}
-                      {item.minDays && <div className="list-desc">Min. czas: {item.minDays} dni</div>}
-                      {item.stages && <div className="list-desc">Etapy: {item.stages.join(', ')}</div>}
-                      {item.position && <div className="list-desc">Stanowisko: {item.position}</div>}
-                      {item.service && <div className="list-desc">Usługa: {item.service}</div>}
-                    </div>
-                    <div className="list-actions">
-                      <button className="btn btn-sm" onClick={() => { setEditItem(item); setModalType(activeTab as ModalType); setShowModal(true); }}>✏️ Edytuj</button>
-                      <button className="btn btn-sm btn-red" onClick={() => setShowConfirmDelete({ type: activeTab, id: item.id })}>🗑️ Usuń</button>
-                      <button
-                        className="btn btn-sm btn-red"
-                        onClick={() => {
-                          const tabToDeleteType: Record<string, string> = {
-                            doctors: 'doctor',
-                            prosthetics: 'prosthetic',
-                            employees: 'employee',
-                            suppliers: 'supplier',
-                          };
-                          setShowConfirmDelete({ type: tabToDeleteType[activeTab], id: item.id });
-                        }}
-                      >
-                        🗑️ Usuń
-                      </button>
-                    </div>
-                  </div>
-                ));
-            })()}
+            <div className="list-actions">
+              <button className="btn btn-sm" onClick={() => { 
+                setEditItem(item); 
+                const tabToModalType: Record<string, ModalType> = {
+                  doctors: 'doctor',
+                  prosthetics: 'prosthetic',
+                  employees: 'employee',
+                  suppliers: 'supplier',
+                };
+                setModalType(tabToModalType[activeTab]); 
+                setShowModal(true); 
+              }}>✏️ Edytuj</button>
+              <button
+                className="btn btn-sm btn-red"
+                onClick={() => {
+                  const tabToDeleteType: Record<string, string> = {
+                    doctors: 'doctor',
+                    prosthetics: 'prosthetic',
+                    employees: 'employee',
+                    suppliers: 'supplier',
+                  };
+                  setShowConfirmDelete({ type: tabToDeleteType[activeTab], id: item.id });
+                }}
+              >
+                🗑️ Usuń
+              </button>
+            </div>
           </div>
-        )}
+        ));
+    })()}
+  </div>
+)}
 
         {activeTab === 'invoices' && (
           <div className="card">
